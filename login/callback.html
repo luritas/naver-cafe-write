@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
+            charset="utf-8"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<form action="./login.php" method="post" id="frm">
+        <input type="text" name="access_token" id="access_token">
+        <input type="text" name="state" id="state">
+        <input type="text" name="token_type" id="token_type">
+        <input type="text" name="expires_in" id="expires_in">
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    var naver_id_login = new naver_id_login("54kdlbZLR7BVzzB6UF22", "http://localhost:8080/callback.html");
+    // 접근 토큰 값 출력
+    alert(naver_id_login.oauthParams.access_token);
+
+    // 네이버 사용자 프로필 조회
+    naver_id_login.get_naver_userprofile("naverSignInCallback()");
+
+    // 네이버 사용자 프로필 조회 이후 프로필 정보를 처리할 callback function
+    function naverSignInCallback() {
+        console.log(naver_id_login);
+        $('#access_token').val(naver_id_login.oauthParams.access_token);
+        $('#state').val(naver_id_login.oauthParams.state);
+        $('#token_type').val(naver_id_login.oauthParams.token_type);
+        $('#expires_in').val(naver_id_login.oauthParams.expires_in);
+        document.getElementById('frm').submit();
+    }
+</script>
+</body>
+</html>
+
+mysql -uroot -ppassword -e "CREATE DATABASE naver1 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"  CREATE TABLE `tokens` ( `id` int(10) unsigned NOT NULL AUTO_INCREMENT, `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL, `refresh_token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL, `expires_at` datetime NOT NULL, `created_at` timestamp NULL DEFAULT NULL, `updated_at` timestamp NULL DEFAULT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=4716 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
