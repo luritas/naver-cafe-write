@@ -1,6 +1,7 @@
 import os
 import sys
 import pymysql
+import pprint
 
 
 class Database:
@@ -31,9 +32,11 @@ class Database:
             with self.connection.cursor() as cursor:
                 cursor.executemany(sql, data)
                 self.connection.commit()
+            print("쿼리를 실행했습니다")
         except Exception as e:
             print(e)
             self.connection.close()
+            return
 
     def close(self):
         self.connection.close()

@@ -11,12 +11,14 @@ class OpenApi:
         self.hostname = "http://openapi.molit.go.kr"
         self.urls = {
             "real_price_trade": self.hostname + "/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
-                                                "getRTMSDataSvcAptTradeDev"
+                                                "getRTMSDataSvcAptTradeDev",
+            "real_rent_apt": self.hostname + "/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
+                                             "getRTMSDataSvcOffiRent"
         }
         self.url_name = None
         self.param = None
 
-    def set_param(self, prameters):
+    def set_param(self, parameters):
         raise Exception("set_param 메서드를 구현해주세요")
 
     def save_database_from_open_api(self):
@@ -35,4 +37,3 @@ class OpenApi:
             return json.dumps(content)
         else:
             return "Error Code:" + res_code
-

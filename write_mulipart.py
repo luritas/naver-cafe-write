@@ -1,8 +1,54 @@
 # cafe mulipart upload - python
 import os
 import sys
-import requests
+import math
+# import requests
 import urllib.request
+
+from packages.db import Database
+from packages.real_price_trade import RealPriceTrade
+
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+# **************************** 실거래가 조회 시작 **************************** #
+today_date = datetime.today()
+today_month = today_date.strftime("%Y%m")
+one_month_ago = (today_date - relativedelta(months=1)).strftime("%Y%m")
+two_month_ago = (today_date - relativedelta(months=2)).strftime("%Y%m")
+
+print(two_month_ago + " 이후의 실거래가를 조회합니다")
+print("=" * 50)
+
+months = (two_month_ago, one_month_ago, today_month)
+real_price_trade = RealPriceTrade()
+total_items = []
+for month in months:
+    print(str(month) + "를 조회합니다")
+    content = real_price_trade.get_parsed_content('강북구', str(month), 1, 1)
+    if real_price_trade.get_result_code_from_parsed_content(content) != "00":
+        raise Exception('공공데이터 포털 통신 오류')
+
+    total_count = real_price_trade.get_total_count(content)
+    row_per_page = 10
+    total_page_no = int(math.ceil(total_count / row_per_page)) + 1
+    for i in range(1, total_page_no):
+        print("Page Number: " + str(i))
+        content = real_price_trade.get_parsed_content('강북구', str(month), i, row_per_page)
+        items = real_price_trade.get_items_from_parsed_content(content)
+        for item in items:
+            total_items.append(item)
+
+db = Database()
+db.connect()
+sql = real_price_trade.create_sql()
+param = real_price_trade.create_param(total_items)  # for 문 돌면서 items에 있는것들 모두 받을 수 있게 바꾸기
+db.insert(sql, param)
+db.close()
+
+sys.exit()
+
+# **************************** 실거래가 조회 끝 **************************** #
 
 token = os.environ.get("TOKEN")
 header = "Bearer " + token  # Bearer 다음에 공백 추가
@@ -22,6 +68,6 @@ response = requests.post(url, headers=headers, data=data, files=files)
 
 rescode = response.status_code
 if (rescode == 200):
-    print (response.text)
+    print(response.text)
 else:
     print(rescode)

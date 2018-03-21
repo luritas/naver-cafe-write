@@ -1,13 +1,14 @@
 # 아파트 실거래가 조회
+# http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD=11305&DEAL_YMD=201803&pageNo=1&serviceKey=uSBGVwdHO%2Bf7zwY%2B7LSMMKwDTrmKkc9pT429CFbwuCeq2vkJmm9EXG1G5DtpiPFGN8m%2BTD4ykq0YVR%2FjXLXinw%3D%3D
+
 import json
 import math
 import urllib.request
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
-from open_api import OpenApi
-
-from db import Database
-import sys
-from pprint import pprint
+from packages.open_api import OpenApi
+from packages.db import Database
 
 
 class RealPriceTrade(OpenApi):
@@ -19,8 +20,9 @@ class RealPriceTrade(OpenApi):
 
     def set_param(self, param):
         region_code = urllib.parse.quote(self.__get_region_code(param['region']))
-        self.param = "LAWD_CD={LAWD_CD}&DEAL_YMD={DEAL_YMD}&pageNo={page_no}" \
-            .format(LAWD_CD=region_code, DEAL_YMD=param['date'], page_no=param['page_no'])
+        self.param = "LAWD_CD={LAWD_CD}&DEAL_YMD={DEAL_YMD}&pageNo={page_no}&numOfRows={row_per_page}" \
+            .format(LAWD_CD=region_code, DEAL_YMD=param['date'], page_no=param['page_no'],
+                    row_per_page=param['row_per_page'])
 
     def save_database_from_open_api(self, item):
         pass
@@ -33,7 +35,7 @@ class RealPriceTrade(OpenApi):
     INSERT INTO `apt_real_trade_price`
 (`id`,
 `price`,
-`completion date`,
+`completion_date`,
 `year`,
 `road_address`,
 
@@ -59,7 +61,8 @@ class RealPriceTrade(OpenApi):
 `private_area`,
 `jibun`,
 `region_area`,
-`floor`)
+`floor`,
+`status`)
 VALUES
 (null,
 %s,
@@ -89,87 +92,112 @@ VALUES
 %s,
 %s,
 %s,
-%s);
+%s,
+0) ON DUPLICATE KEY UPDATE `status` = 2;
 """
         return sql
 
-    def create_param(self):
-        param = (
-            (
-                items[0][0]['거래금액'],
-                items[0][0]['건축년도'],
-                items[0][0]['년'],
-                items[0][0]['도로명'],
+    def create_param(self, items):
+        param = []
+        for index, item in enumerate(items):
+            try:
+                item['도로명지상지하코드']
+            except Exception as e:
+                item['도로명지상지하코드'] = ''
 
-                items[0][0]['도로명건물본번호코드'],
-                items[0][0]['도로명건물부번호코드'],
-                items[0][0]['도로명시군구코드'],
-                items[0][0]['도로명일련번호코드'],
-                items[0][0]['도로명지상지하코드'],
+            # print("[" + str(index) + "]" + item['아파트'] + " 단지 실거래가를 추가하였습니다")
+            param.append(tuple([
+                item['거래금액'],
+                item['건축년도'],
+                item['년'],
+                item['도로명'],
 
-                items[0][0]['도로명코드'],
-                items[0][0]['법정동'],
-                items[0][0]['법정동본번코드'],
-                items[0][0]['법정동부번코드'],
-                items[0][0]['법정동시군구코드'],
+                item['도로명건물본번호코드'],
+                item['도로명건물부번호코드'],
+                item['도로명시군구코드'],
+                item['도로명일련번호코드'],
+                item['도로명지상지하코드'],
 
-                items[0][0]['법정동읍면동코드'],
-                items[0][0]['법정동지번코드'],
-                items[0][0]['아파트'],
-                items[0][0]['월'],
-                items[0][0]['일'],
+                item['도로명코드'],
+                item['법정동'],
+                item['법정동본번코드'],
+                item['법정동부번코드'],
+                item['법정동시군구코드'],
 
-                items[0][0]['일련번호'],
-                items[0][0]['전용면적'],
-                items[0][0]['지번'],
-                items[0][0]['지역코드'],
-                items[0][0]['층'],
-            ),
-        )
+                item['법정동읍면동코드'],
+                item['법정동지번코드'],
+                item['아파트'],
+                item['월'],
+                item['일'],
 
-        return param
+                item['일련번호'],
+                item['전용면적'],
+                item['지번'],
+                item['지역코드'],
+                item['층'],
+            ]))
+
+        return tuple(param)
+
+    def get_parsed_content(self, region, date, page_no, row_per_page):
+        self.set_param({"region": region, "date": date, "page_no": page_no, "row_per_page": row_per_page})
+        json_content = self.get_content()
+        return json.loads(json_content)
+
+    def get_body_from_parsed_content(self, content):
+        return content['response']['body']
+
+    def get_header_from_parsed_content(self, content):
+        return content['response']['header']
+
+    def get_items_from_parsed_content(self, content):
+        return self.get_body_from_parsed_content(content)['items']['item']
+
+    def get_result_code_from_parsed_content(self, content):
+        return self.get_header_from_parsed_content(content)['resultCode']
+
+    def get_total_count(self, content):
+        return int(self.get_body_from_parsed_content(content)['totalCount'])
 
 
 # 모듈로 호출하지 않고 메인에서 호출했을 경우에만 실행
 if __name__ == "__main__":
+    today_date = datetime.today()
+    today_month = today_date.strftime("%Y%m")
+    one_month_ago = (today_date - relativedelta(months=1)).strftime("%Y%m")
+    two_month_ago = (today_date - relativedelta(months=2)).strftime("%Y%m")
+
+    print(two_month_ago + " 이후의 실거래가를 조회합니다")
+    print("=" * 50)
+
+    months = (two_month_ago, one_month_ago, today_month)
     real_price_trade = RealPriceTrade()
-    param = {"region": "강북구", "date": "201803", "page_no": 2}
-    real_price_trade.set_param(param)
-    json_content = real_price_trade.get_content()
-    content = json.loads(json_content)
-    items = [content['response']['body']['items']['item']]
+    total_items = []
+    for month in months:
+        print(str(month) + "를 조회합니다")
+        content = real_price_trade.get_parsed_content('강북구', str(month), 1, 1)
 
-    result_code = content['response']['header']['resultCode']
-    if result_code != "00":
-        raise Exception('공공데이터 포털 통신 오류')
+        if real_price_trade.get_result_code_from_parsed_content(content) != "00":
+            raise Exception('공공데이터 포털 통신 오류')
 
-    '''
-    num_of_rows = int(content['response']['body']['numOfRows'])
-    page_no = int(content['response']['body']['pageNo'])
-    total_count = int(content['response']['body']['totalCount'])
-    total_page = int(math.ceil(total_count / num_of_rows))
+        total_count = real_price_trade.get_total_count(content)
+        row_per_page = 10
+        total_page_no = int(math.ceil(total_count / row_per_page)) + 1
 
-    for i in range(2, total_page):
-        param = {"region": "강북구", "date": "201803", "page_no": i}
-        real_price_trade.set_param(param)
-        content = json.loads(real_price_trade.get_content())
-        items.append(content['response']['body']['items']['item'])
-    '''
+        for i in range(1, total_page_no):
+            print("Page Number: " + str(i))
+            content = real_price_trade.get_parsed_content('강북구', str(month), i, row_per_page)
+            items = real_price_trade.get_items_from_parsed_content(content)
+            for item in items:
+                total_items.append(item)
 
+    # pprint(total_items)
     db = Database()
     db.connect()
-    pprint(items[0][0])
     sql = real_price_trade.create_sql()
-    param = real_price_trade.create_param()    # for 문 돌면서 items에 있는것들 모두 받을 수 있게 바꾸기
+    param = real_price_trade.create_param(total_items)  # for 문 돌면서 items에 있는것들 모두 받을 수 있게 바꾸기
     db.insert(sql, param)
 
     db.close()
-    for item in items:
-        pass
-
-    # pprint(items)
-
-    # print(item)
-
     #  print(search('미아동', '201802'))
     # response => body => items => item 배열에 {}로 나옴
