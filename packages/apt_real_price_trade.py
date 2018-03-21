@@ -3,6 +3,7 @@
 
 import json
 import math
+import sys
 import urllib.request
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -11,11 +12,11 @@ from packages.open_api import OpenApi
 from packages.db import Database
 
 
-class RealPriceTrade(OpenApi):
+class AptRealPriceTrade(OpenApi):
 
     def __init__(self):
         super().__init__()
-        self.url_name = "real_price_trade"
+        self.url_name = "apt_real_price_trade"
         self.param = None
 
     def set_param(self, param):
@@ -60,7 +61,7 @@ class RealPriceTrade(OpenApi):
 `serial_number`,
 `private_area`,
 `jibun`,
-`region_area`,
+`region_code`,
 `floor`,
 `status`)
 VALUES
@@ -151,7 +152,11 @@ VALUES
         return content['response']['header']
 
     def get_items_from_parsed_content(self, content):
-        return self.get_body_from_parsed_content(content)['items']['item']
+        try:
+            return self.get_body_from_parsed_content(content)['items']['item']
+        except Exception as e:
+            print(e)
+            sys.exit()
 
     def get_result_code_from_parsed_content(self, content):
         return self.get_header_from_parsed_content(content)['resultCode']
@@ -171,7 +176,7 @@ if __name__ == "__main__":
     print("=" * 50)
 
     months = (two_month_ago, one_month_ago, today_month)
-    real_price_trade = RealPriceTrade()
+    real_price_trade = AptRealPriceTrade()
     total_items = []
     for month in months:
         print(str(month) + "를 조회합니다")

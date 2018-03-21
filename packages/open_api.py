@@ -1,7 +1,8 @@
 import os
-import urllib.request
+import sys
 import json
 import xmltodict
+import urllib.request
 
 
 class OpenApi:
@@ -10,10 +11,10 @@ class OpenApi:
         self.service_key = os.environ.get("APT_TRADE_SERVICE_KEY")
         self.hostname = "http://openapi.molit.go.kr"
         self.urls = {
-            "real_price_trade": self.hostname + "/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
+            "apt_real_price_trade": self.hostname + "/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
                                                 "getRTMSDataSvcAptTradeDev",
-            "real_rent_apt": self.hostname + "/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
-                                             "getRTMSDataSvcOffiRent"
+            "apt_real_rent": self.hostname + ":8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
+                                             "getRTMSDataSvcAptRent"
         }
         self.url_name = None
         self.param = None
@@ -28,6 +29,7 @@ class OpenApi:
         url = self.urls[self.url_name]
         self.param += "&serviceKey={SERVICE_KEY}".format(SERVICE_KEY=self.service_key)  # add service_key
         # print(url + "?" + self.param)
+        # sys.exit()
         request = urllib.request.Request(url + "?" + self.param)
         response = urllib.request.urlopen(request)
         res_code = response.getcode()

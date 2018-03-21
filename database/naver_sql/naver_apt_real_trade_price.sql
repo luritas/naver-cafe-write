@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `apt_real_trade_price`;
 CREATE TABLE `apt_real_trade_price` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `price` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '거래금액',
-  `completion date` year(4) DEFAULT NULL COMMENT '건축년도\n',
+  `completion_date` year(4) DEFAULT NULL COMMENT '건축년도\n',
   `year` year(4) DEFAULT NULL,
   `road_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '도로명',
   `road_main_code` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '도로명건물본번호코드',
@@ -46,10 +46,12 @@ CREATE TABLE `apt_real_trade_price` (
   `serial_number` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '일련번호',
   `private_area` float DEFAULT NULL COMMENT '전용면적',
   `jibun` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `region_area` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '지역코드',
+  `region_code` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '지역코드',
   `floor` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -58,7 +60,6 @@ CREATE TABLE `apt_real_trade_price` (
 
 LOCK TABLES `apt_real_trade_price` WRITE;
 /*!40000 ALTER TABLE `apt_real_trade_price` DISABLE KEYS */;
-INSERT INTO `apt_real_trade_price` VALUES (3,'52,800',2003,2018,'오패산로30길','00030','00000','11305','01','0','4124400','미아동','1356','0000','11305','10100','1','경남아너스빌(1356-0)',3,'1~10','11305-47',114.92,'1356','11305',11),(4,'48,900',2004,2018,'솔샘로','00174','00000','11305','01','0','3005042','미아동','1353','0000','11305','10100','1','에스케이북한산시티',3,'1~10','11305-6',114.85,'1353','11305',5);
 /*!40000 ALTER TABLE `apt_real_trade_price` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -71,4 +72,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-20 19:59:43
+-- Dump completed on 2018-03-21 11:33:34

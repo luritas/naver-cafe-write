@@ -16,31 +16,39 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `tokens`
+-- Table structure for table `apt_real_rent`
 --
 
-DROP TABLE IF EXISTS `tokens`;
+DROP TABLE IF EXISTS `apt_real_rent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tokens` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `refresh_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `expires_at` datetime NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `token_UNIQUE` (`token`)
+CREATE TABLE `apt_real_rent` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `completion date` year(4) DEFAULT NULL,
+  `year` year(4) DEFAULT NULL,
+  `law_name` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '법정동\n',
+  `deposit` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '보증금',
+  `apt_name` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '아파트 이름',
+  `month` int(11) DEFAULT NULL,
+  `rent_fee` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '월세',
+  `day` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `private_area` float DEFAULT NULL COMMENT '전용면적\n',
+  `jibun` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `region_code` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '지역 코드\n',
+  `floor` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tokens`
+-- Dumping data for table `apt_real_rent`
 --
 
-LOCK TABLES `tokens` WRITE;
-/*!40000 ALTER TABLE `tokens` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tokens` ENABLE KEYS */;
+LOCK TABLES `apt_real_rent` WRITE;
+/*!40000 ALTER TABLE `apt_real_rent` DISABLE KEYS */;
+/*!40000 ALTER TABLE `apt_real_rent` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-21 11:33:34
+-- Dump completed on 2018-03-21 11:33:35
