@@ -31,6 +31,38 @@ class AptRealPriceTrade(OpenApi):
     def __get_region_code(self, region):
         return '11305'
 
+    def create_select_sql(self):
+        return """
+            SELECT `apt_real_trade_price`.`id`,
+                `apt_real_trade_price`.`price`,
+                `apt_real_trade_price`.`completion_date`,
+                `apt_real_trade_price`.`year`,
+                `apt_real_trade_price`.`road_address`,
+                `apt_real_trade_price`.`road_main_code`,
+                `apt_real_trade_price`.`road_sub_code`,
+                `apt_real_trade_price`.`road_sigungu_code`,
+                `apt_real_trade_price`.`road_serial_code`,
+                `apt_real_trade_price`.`road_under_code`,
+                `apt_real_trade_price`.`road_code`,
+                `apt_real_trade_price`.`law_name`,
+                `apt_real_trade_price`.`law_main_code`,
+                `apt_real_trade_price`.`law_sub_code`,
+                `apt_real_trade_price`.`law_sigungu_code`,
+                `apt_real_trade_price`.`law_umd_code`,
+                `apt_real_trade_price`.`law_jibun_code`,
+                `apt_real_trade_price`.`apt_name`,
+                `apt_real_trade_price`.`month`,
+                `apt_real_trade_price`.`day`,
+                `apt_real_trade_price`.`serial_number`,
+                `apt_real_trade_price`.`private_area`,
+                `apt_real_trade_price`.`jibun`,
+                `apt_real_trade_price`.`region_code`,
+                `apt_real_trade_price`.`floor`,
+                `apt_real_trade_price`.`status`,
+                `apt_real_trade_price`.`created_at`
+            FROM `naver`.`apt_real_trade_price`;
+        """
+
     def create_sql(self):
         sql = """
     INSERT INTO `apt_real_trade_price`
@@ -65,7 +97,7 @@ class AptRealPriceTrade(OpenApi):
 `floor`,
 `status`)
 VALUES
-(null,
+(NULL,
 %s,
 %s,
 %s,

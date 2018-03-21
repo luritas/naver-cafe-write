@@ -1,54 +1,34 @@
 # cafe mulipart upload - python
 import os
 import sys
-import math
-# import requests
+import requests
 import urllib.request
 
+from pprint import pprint
 from packages.db import Database
+
 from packages.apt_real_price_trade import AptRealPriceTrade
-
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
-# **************************** 실거래가 조회 시작 **************************** #
-today_date = datetime.today()
-today_month = today_date.strftime("%Y%m")
-one_month_ago = (today_date - relativedelta(months=1)).strftime("%Y%m")
-two_month_ago = (today_date - relativedelta(months=2)).strftime("%Y%m")
-
-print(two_month_ago + " 이후의 실거래가를 조회합니다")
-print("=" * 50)
-
-months = (two_month_ago, one_month_ago, today_month)
-apt_real_price_trade = AptRealPriceTrade()
-total_items = []
-for month in months:
-    print(str(month) + "를 조회합니다")
-    content = apt_real_price_trade.get_parsed_content('강북구', str(month), 1, 1)
-    if apt_real_price_trade.get_result_code_from_parsed_content(content) != "00":
-        raise Exception('공공데이터 포털 통신 오류')
-
-    total_count = apt_real_price_trade.get_total_count(content)
-    row_per_page = 10
-    total_page_no = int(math.ceil(total_count / row_per_page)) + 1
-    for i in range(1, total_page_no):
-        print("Page Number: " + str(i))
-        content = apt_real_price_trade.get_parsed_content('강북구', str(month), i, row_per_page)
-        items = apt_real_price_trade.get_items_from_parsed_content(content)
-        for item in items:
-            total_items.append(item)
+from packages.apt_real_rent import AptRealRent
 
 db = Database()
 db.connect()
-sql = apt_real_price_trade.create_sql()
-param = apt_real_price_trade.create_param(total_items)  # for 문 돌면서 items에 있는것들 모두 받을 수 있게 바꾸기
-db.insert(sql, param)
+
+# SQL문 실행
+apt_real_price_trade = AptRealPriceTrade()
+apt_real_rent = AptRealRent()
+
+data_apt_trade = db.select(apt_real_price_trade.create_select_sql())
+data_apt_rent = db.select(apt_real_rent.create_select_sql())
+
+pprint(data_apt_trade)
+pprint(data_apt_rent)
+
+# TODO 우선 아파트 실거래가를 유의미하게 던져주기!! 예를 들면 1월 2월 각각 아파트 거래량 표기 미아뉴타운이 위로 보이고 아래는 그 이외의 것들
+# TODO 두산트레지움       삼성트리베라2차        삼성트리베라1차        SK뷰         삼각산아이원      송천센트레빌1차    송천센트레빌 2차
+# TODO 미아뉴타운 하면 길음뉴타운까지 같이하기
+
 db.close()
-
 sys.exit()
-
-# **************************** 실거래가 조회 끝 **************************** #
 
 token = os.environ.get("TOKEN")
 header = "Bearer " + token  # Bearer 다음에 공백 추가

@@ -32,6 +32,26 @@ class AptRealRent(OpenApi):
     def __get_region_code(self, region):
         return '11305'
 
+    def create_select_sql(self):
+        return """
+            SELECT `apt_real_rent`.`id`,
+                `apt_real_rent`.`completion date`,
+                `apt_real_rent`.`year`,
+                `apt_real_rent`.`law_name`,
+                `apt_real_rent`.`deposit`,
+                `apt_real_rent`.`apt_name`,
+                `apt_real_rent`.`month`,
+                `apt_real_rent`.`rent_fee`,
+                `apt_real_rent`.`day`,
+                `apt_real_rent`.`private_area`,
+                `apt_real_rent`.`jibun`,
+                `apt_real_rent`.`region_code`,
+                `apt_real_rent`.`floor`,
+                `apt_real_rent`.`status`,
+                `apt_real_rent`.`created_at`
+            FROM `naver`.`apt_real_rent`;
+        """
+
     def create_sql(self):
         return """
 INSERT INTO `naver`.`apt_real_rent`
@@ -114,6 +134,7 @@ VALUES
 
     def get_total_count(self, content):
         return int(self.get_body_from_parsed_content(content)['totalCount'])
+
 
 if __name__ == "__main__":
     today_date = datetime.today()

@@ -25,6 +25,16 @@ class Database:
             raise Exception("데이터 베이스 연결 실패")
         # Connection 으로부터 Cursor 생성
 
+    def select(self, sql):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(sql)
+                print("쿼리를 실행했습니다")
+                return cursor.fetchall()
+        except Exception as e:
+            print(e)
+            self.connection.close()
+
     def insert(self, sql, data):
         # data = ( ('홍진우', 1, '서울'), )
         # sql = "insert into customer(name,category,region) values (%s, %s, %s)"
@@ -36,7 +46,6 @@ class Database:
         except Exception as e:
             print(e)
             self.connection.close()
-            return
 
     def close(self):
         self.connection.close()
