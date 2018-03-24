@@ -12,7 +12,7 @@ class OpenApi:
         self.hostname = "http://openapi.molit.go.kr"
         self.urls = {
             "apt_real_price_trade": self.hostname + "/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
-                                                "getRTMSDataSvcAptTradeDev",
+                                                    "getRTMSDataSvcAptTradeDev",
             "apt_real_rent": self.hostname + ":8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
                                              "getRTMSDataSvcAptRent"
         }

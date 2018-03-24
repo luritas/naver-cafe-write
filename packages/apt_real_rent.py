@@ -1,16 +1,17 @@
 # 아파트 전월세 조회
 # http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptRent?LAWD_CD=11305&DEAL_YMD=201801&pageNo=1&numOfRows=1&serviceKey=uSBGVwdHO%2Bf7zwY%2B7LSMMKwDTrmKkc9pT429CFbwuCeq2vkJmm9EXG1G5DtpiPFGN8m%2BTD4ykq0YVR%2FjXLXinw%3D%3D
 
+import sys
 import json
 import math
 import urllib.request
-import sys
+
+from packages.open_api import OpenApi
+from packages.db import Database
+
 from pprint import pprint
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
-from open_api import OpenApi
-from db import Database
 
 
 class AptRealRent(OpenApi):
@@ -35,7 +36,7 @@ class AptRealRent(OpenApi):
     def create_select_sql(self):
         return """
             SELECT `apt_real_rent`.`id`,
-                `apt_real_rent`.`completion date`,
+                `apt_real_rent`.`completion_date`,
                 `apt_real_rent`.`year`,
                 `apt_real_rent`.`law_name`,
                 `apt_real_rent`.`deposit`,
