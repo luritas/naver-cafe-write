@@ -4,9 +4,13 @@
 import json
 import math
 import sys
+from pprint import pprint
 import urllib.request
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from collections import defaultdict
+
+dct = defaultdict(list)
 
 from packages.open_api import OpenApi
 from packages.db import Database
@@ -18,6 +22,10 @@ class AptRealPriceTrade(OpenApi):
         super().__init__()
         self.url_name = "apt_real_price_trade"
         self.param = None
+        self.twenty_area = {}
+        self.thirty_area = {}
+        self.forty_area = {}
+        self.etc_area = {}
 
     def set_param(self, param):
         region_code = urllib.parse.quote(self.__get_region_code(param['region']))
@@ -31,42 +39,60 @@ class AptRealPriceTrade(OpenApi):
     def __get_region_code(self, region):
         return '11305'
 
-    def create_select_sql(self):
+    def create_select_sql(self, year, month):
         return """
-            SELECT `apt_real_trade_price`.`id`,
-                `apt_real_trade_price`.`price`,
-                `apt_real_trade_price`.`completion_date`,
-                `apt_real_trade_price`.`year`,
-                `apt_real_trade_price`.`road_address`,
-                
-                `apt_real_trade_price`.`road_main_code`,
-                `apt_real_trade_price`.`road_sub_code`,
-                `apt_real_trade_price`.`road_sigungu_code`,
-                `apt_real_trade_price`.`road_serial_code`,
-                `apt_real_trade_price`.`road_under_code`,
-                
-                `apt_real_trade_price`.`road_code`,
-                `apt_real_trade_price`.`law_name`,
-                `apt_real_trade_price`.`law_main_code`,
-                `apt_real_trade_price`.`law_sub_code`,
-                `apt_real_trade_price`.`law_sigungu_code`,
-                
-                `apt_real_trade_price`.`law_umd_code`,
-                `apt_real_trade_price`.`law_jibun_code`,
-                `apt_real_trade_price`.`apt_name`,
-                `apt_real_trade_price`.`month`,
-                `apt_real_trade_price`.`day`,
-                
-                `apt_real_trade_price`.`serial_number`,
-                `apt_real_trade_price`.`private_area`,
-                `apt_real_trade_price`.`jibun`,
-                `apt_real_trade_price`.`region_code`,
-                `apt_real_trade_price`.`floor`,
-                
-                `apt_real_trade_price`.`status`,
-                `apt_real_trade_price`.`created_at`
-            FROM `naver`.`apt_real_trade_price`;
-        """
+SELECT 
+    `apt_real_trade_price`.`id`,
+    `apt_real_trade_price`.`price`,
+    `apt_real_trade_price`.`completion_date`,
+    `apt_real_trade_price`.`year`,
+    `apt_real_trade_price`.`road_address`,
+    `apt_real_trade_price`.`road_main_code`,
+    `apt_real_trade_price`.`road_sub_code`,
+    `apt_real_trade_price`.`road_sigungu_code`,
+    `apt_real_trade_price`.`road_serial_code`,
+    `apt_real_trade_price`.`road_under_code`,
+    `apt_real_trade_price`.`road_code`,
+    `apt_real_trade_price`.`law_name`,
+    `apt_real_trade_price`.`law_main_code`,
+    `apt_real_trade_price`.`law_sub_code`,
+    `apt_real_trade_price`.`law_sigungu_code`,
+    `apt_real_trade_price`.`law_umd_code`,
+    `apt_real_trade_price`.`law_jibun_code`,
+    `apt_real_trade_price`.`apt_name`,
+    `apt_real_trade_price`.`month`,
+    `apt_real_trade_price`.`day`,
+    `apt_real_trade_price`.`serial_number`,
+    `apt_real_trade_price`.`private_area`,
+    `apt_real_trade_price`.`jibun`,
+    `apt_real_trade_price`.`region_code`,
+    `apt_real_trade_price`.`floor`,
+    `apt_real_trade_price`.`status`,
+    `apt_real_trade_price`.`created_at`
+FROM
+    `naver`.`apt_real_trade_price`
+WHERE
+    `apt_name` IN (SELECT 
+            `a`.`apt_name`
+        FROM
+            `naver`.`apt_real_trade_price` `a`
+        WHERE
+            `year` = %d
+            AND `month` = %d
+        GROUP BY `a`.`apt_name`
+        HAVING COUNT(`a`.`apt_name`) > 5)
+        AND `year` = %d
+        AND `month` = %d
+ORDER BY FIELD(apt_name,
+        '벽산라이브파크',
+        '삼각산아이원',
+        '송천센트레빌',
+        '미아동부센트레빌',
+        '래미안트리베라1단지',
+        '두산위브트레지움',
+        '삼성래미안트리베라2단지',
+        '에스케이북한산시티') DESC, `price` DESC;
+""" % (year, month, year, month)
 
     def create_sql(self):
         sql = """
@@ -200,6 +226,108 @@ VALUES
 
     def get_total_count(self, content):
         return int(self.get_body_from_parsed_content(content)['totalCount'])
+
+    def parse_data(self, data_apt_trade):
+        self.set_parse_korean_real_estate_api(data_apt_trade)
+        return self.items
+
+    def set_parse_korean_real_estate_api(self, data_apt_trade):
+        pared_data_apt_trade = {}
+        for data in list(data_apt_trade):
+            try:
+                pared_data_apt_trade[str(data[17])].append({
+                    "private_area": data[21],
+                    "price": data[1],
+                    "floor": data[24]
+                })
+            except KeyError as ke:
+                pared_data_apt_trade[str(data[17])] = [{
+                    "private_area": data[21],
+                    "price": data[1],
+                    "floor": data[24]
+                }]
+            except Exception as e:
+                raise Exception(e)
+        self.items = pared_data_apt_trade
+
+    def set_area_data(self):
+        for index, (apt_name, apt_data) in enumerate(self.items.items()):
+            for data in apt_data:
+                try:
+                    if data['private_area'] < 60:
+                        self.twenty_area.setdefault(apt_name, []).append(
+                            "%s(%d층)" % (data['price'], data['floor']))
+                    elif data['private_area'] < 85:
+                        self.thirty_area.setdefault(apt_name, []).append(
+                            "%s(%d층)" % (data['price'], data['floor']))
+                    elif data['private_area'] < 120:
+                        self.forty_area.setdefault(apt_name, []).append(
+                            "%s(%d층)" % (data['price'], data['floor']))
+                    else:
+                        self.etc_area.setdefault(apt_name, []).append(
+                            "%s(%d층)" % (data['price'], data['floor']))
+                except Exception as e:
+                    raise Exception(e)
+
+    def get_contents(self):
+        html_price = html_count = """
+        <table>
+            <thead>
+                <tr>
+                    <th style='vertical-align: bottom; border-bottom: 2px solid #ddd;padding: 8px;line-height: 1.6;'>아파트/평형</td>
+                    <th style='vertical-align: bottom; border-bottom: 2px solid #ddd;padding: 8px;line-height: 1.6;'>20평</th>
+                    <th style='vertical-align: bottom; border-bottom: 2px solid #ddd;padding: 8px;line-height: 1.6;'>30평</th>
+                    <th style='vertical-align: bottom; border-bottom: 2px solid #ddd;padding: 8px;line-height: 1.6;'>40평</th>
+                    <th style='vertical-align: bottom; border-bottom: 2px solid #ddd;padding: 8px;line-height: 1.6;'>40평 초과</th>
+                </tr>
+            </thead>
+            <tbody>
+        """
+        distinct_row = 0
+        for apt_name in self.items:
+            len_twenty_area = len(self.twenty_area.setdefault(apt_name, []))
+            len_thirty_area = len(self.thirty_area.setdefault(apt_name, []))
+            len_forty_area = len(self.forty_area.setdefault(apt_name, []))
+            len_etc_area = len(self.etc_area.setdefault(apt_name, []))
+            distinct_row += 1
+            for i in range(0, max(len_twenty_area, len_thirty_area, len_forty_area, len_etc_area)):
+                temp_twenty_area = i < len_twenty_area and self.twenty_area[apt_name][i] or ""
+                temp_thirty_area = i < len_thirty_area and self.thirty_area[apt_name][i] or ""
+                temp_forty_area = i < len_forty_area and self.forty_area[apt_name][i] or ""
+                temp_etc_area = i < len_etc_area and self.etc_area[apt_name][i] or ""
+                apt_name_title = i == 0 and apt_name or ''
+                if temp_twenty_area + temp_thirty_area + temp_forty_area + temp_etc_area == "":
+                    pprint('건너뛰기!!!!!!!!!!!!!!!!!!')
+                    continue
+                bgcolor = distinct_row % 2 == 1 and "background-color: #ddd;" or ""
+                html_price += """
+                <tr style='{5}'>
+                    <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top;'>{0}</td>
+                    <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top;'>{1}</td>
+                    <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top;'>{2}</td>
+                    <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top;'>{3}</td>
+                    <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top;'>{4}</td>
+                </tr>
+                """.format(apt_name_title, temp_twenty_area, temp_thirty_area, temp_forty_area, temp_etc_area, bgcolor)
+                # 20평, 30평, 40평 등 각각수 세서 총합에 넣어주기!!!
+            html_count += """
+            <tr style='{5}'>
+                <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top;'>{0}</td>
+                <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top; text-align: center;'>{1} 건</td>
+                <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top; text-align: center;'>{2} 건</td>
+                <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top; text-align: center;'>{3} 건</td>
+                <td style='padding: 8px 12px;line-height: 1.6;vertical-align: top; text-align: center;'>{4} 건</td>
+            </tr>
+            """.format(apt_name, len_twenty_area, len_thirty_area, len_forty_area,
+                       len_twenty_area + len_thirty_area + len_forty_area, bgcolor)
+
+        html_price += "</tbody></table>"
+        html_count += "</tbody></table> <hr>"
+        count_table = html_count.replace("40평 초과", "총거래(40평 이상 제외)")
+        return {
+            'price': html_price,
+            'count': count_table
+        }
 
 
 # 모듈로 호출하지 않고 메인에서 호출했을 경우에만 실행
