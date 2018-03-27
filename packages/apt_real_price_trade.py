@@ -10,8 +10,6 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 
-dct = defaultdict(list)
-
 from packages.open_api import OpenApi
 from packages.db import Database
 

@@ -6,10 +6,10 @@ import pprint
 
 class Database:
     def __init__(self):
-        self.db_hostname = os.environ.get("DB_PG_HOST")
-        self.db_name = os.environ.get("DB_PG_NAME")
-        self.db_user = os.environ.get("DB_PG_USER")
-        self.db_password = os.environ.get("DB_PG_PASSWORD")
+        self.db_hostname = os.environ.get("DB_HOST")
+        self.db_name = os.environ.get("DB_NAME")
+        self.db_user = os.environ.get("DB_USER")
+        self.db_password = os.environ.get("DB_PASSWORD")
         self.connection = None
 
     def connect(self):

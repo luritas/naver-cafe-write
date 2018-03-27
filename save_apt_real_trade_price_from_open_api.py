@@ -18,7 +18,7 @@ region = "걍북구"
 print(two_month_ago + " 이후의 실거래가를 조회합니다")
 print("=" * 50)
 
-months = (two_month_ago, one_month_ago, today_month)
+months = (two_month_ago,) # one_month_ago, today_month)
 apt_real_price_trade = AptRealPriceTrade()
 total_items = []
 for month in months:
