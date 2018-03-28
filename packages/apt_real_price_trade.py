@@ -206,25 +206,6 @@ VALUES
         json_content = self.get_content()
         return json.loads(json_content)
 
-    def get_body_from_parsed_content(self, content):
-        return content['response']['body']
-
-    def get_header_from_parsed_content(self, content):
-        return content['response']['header']
-
-    def get_items_from_parsed_content(self, content):
-        try:
-            return self.get_body_from_parsed_content(content)['items']['item']
-        except Exception as e:
-            print(e)
-            sys.exit()
-
-    def get_result_code_from_parsed_content(self, content):
-        return self.get_header_from_parsed_content(content)['resultCode']
-
-    def get_total_count(self, content):
-        return int(self.get_body_from_parsed_content(content)['totalCount'])
-
     def parse_data(self, data_apt_trade):
         self.set_parse_korean_real_estate_api(data_apt_trade)
         return self.items
