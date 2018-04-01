@@ -1,6 +1,8 @@
 import os
 import sys
 import json
+from pprint import pprint
+
 import xmltodict
 import urllib.request
 
@@ -59,14 +61,14 @@ class OpenApi:
 
     def get_items_from_parsed_content(self, content):
         try:
-            return self.get_item_from_parsed_content(content)['items']
+            return self.get_body_from_parsed_content(content)['items']
         except Exception as e:
             print(e)
             sys.exit()
 
     def get_item_from_parsed_content(self, content):
         try:
-            return self.get_body_from_parsed_content(content)['item']
+            return self.get_items_from_parsed_content(content)['item']
         except Exception as e:
             print(e)
             sys.exit()

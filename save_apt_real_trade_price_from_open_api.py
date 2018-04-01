@@ -1,6 +1,8 @@
 import sys
 import math
 
+from pprint import pprint
+
 from packages.db import Database
 from packages.apt_real_price_trade import AptRealPriceTrade
 
@@ -15,10 +17,10 @@ one_month_ago = (today_date - relativedelta(months=1)).strftime("%Y%m")
 two_month_ago = (today_date - relativedelta(months=2)).strftime("%Y%m")
 region = "걍북구"
 
-print(two_month_ago + " 이후의 실거래가를 조회합니다")
+print("실거래가를 조회합니다. 아직은 하드코딩으로 박아주세요")
 print("=" * 50)
 
-months = (two_month_ago,) # one_month_ago, today_month)
+months = ("201801", "201802", "201803",)  # one_month_ago, today_month)
 apt_real_price_trade = AptRealPriceTrade()
 total_items = []
 for month in months:
@@ -28,12 +30,12 @@ for month in months:
         raise Exception('공공데이터 포털 통신 오류')
 
     total_count = apt_real_price_trade.get_total_count(content)
-    row_per_page = 10
+    row_per_page = 100
     total_page_no = int(math.ceil(total_count / row_per_page)) + 1
     for i in range(1, total_page_no):
         print("Page Number: " + str(i))
         content = apt_real_price_trade.get_parsed_content(region, str(month), i, row_per_page)
-        items = apt_real_price_trade.get_items_from_parsed_content(content)
+        items = apt_real_price_trade.get_item_from_parsed_content(content)
         for item in items:
             total_items.append(item)
 

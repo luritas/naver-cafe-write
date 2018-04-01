@@ -14,10 +14,10 @@ python 환경에서 설치
 
 # environment values
 ```
-DB_PG_HOST=DB 호스트
-DB_PG_NAME=DB 이름
-DB_PG_USER=DB 유저
-DB_PG_PASSWORD=DB 비밀번호
+DB_NAVER_HOST=DB 호스트
+DB_NAVER_NAME=DB 이름
+DB_NAVER_USER=DB 유저
+DB_NAVER_PASSWORD=DB 비밀번호
 
 APT_TRADE_SERVICE_KEY: 아파트 거래 서비스키
 

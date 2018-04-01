@@ -2,7 +2,7 @@ import json
 import sys
 from pprint import pprint
 
-from packages.open_api import OpenApi
+from open_api import OpenApi
 
 
 class AptList(OpenApi):
@@ -11,11 +11,11 @@ class AptList(OpenApi):
         self.url_name = "apt_list"
 
     def get_legal_dong_apt_list(self, load_code):
-        self.url_method =  '/getLegaldongAptList'
+        self.url_method = '/getLegaldongAptList'
         return self.get_apt_list(load_code)
 
     def get_road_name_apt_list(self, load_code):
-        self.url_method =  '/getLegaldongAptList'
+        self.url_method = '/getLegaldongAptList'
         return self.get_apt_list(load_code)
 
     def get_apt_list(self, load_code):
@@ -33,4 +33,3 @@ if __name__ == "__main__":
     content = apt_list.get_legal_dong_apt_list(load_code)
     items = apt_list.get_items_from_parsed_content(content)
     pprint(items)
-
