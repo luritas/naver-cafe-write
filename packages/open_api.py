@@ -59,6 +59,13 @@ class OpenApi:
     def get_header_from_parsed_content(self, content):
         return content['response']['header']
 
+    def get_only_item_from_parsed_content(self, content):
+        try:
+            return self.get_body_from_parsed_content(content)['item']
+        except Exception as e:
+            print(e)
+            sys.exit()
+
     def get_items_from_parsed_content(self, content):
         try:
             return self.get_body_from_parsed_content(content)['items']

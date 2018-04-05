@@ -1,8 +1,7 @@
 import unittest
 
-from packages.open_api import OpenApi
 from packages.apt_list import AptList
-from packages.apt_maintenance_common import AptMaintenanceFee
+from packages.apt_maintenance_common import AptMaintenanceCommon
 from pprint import pprint
 
 

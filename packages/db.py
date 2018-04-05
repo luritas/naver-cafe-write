@@ -36,8 +36,6 @@ class Database:
             self.connection.close()
 
     def insert(self, sql, data):
-        # data = ( ('홍진우', 1, '서울'), )
-        # sql = "insert into customer(name,category,region) values (%s, %s, %s)"
         try:
             with self.connection.cursor() as cursor:
                 cursor.executemany(sql, data)

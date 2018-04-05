@@ -4,7 +4,7 @@ import urllib
 import requests
 
 from pprint import pprint
-from packages.db import Database
+from .db import Database
 
 
 class NaverCafeWrite:
