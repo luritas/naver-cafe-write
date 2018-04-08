@@ -1,9 +1,5 @@
-import os
-import sys
-
 from packages.db import Database
 from packages.apt_list import AptList
-from pprint import pprint
 
 load_code = "1130510100"  # 미아동
 

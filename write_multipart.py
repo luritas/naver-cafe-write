@@ -11,6 +11,7 @@ from packages.apt_real_price_trade import AptRealPriceTrade
 from packages.apt_real_rent import AptRealRent
 from packages.db import Database
 from packages.naver_cafe_write import NaverCafeWrite
+from packages.apt_maintenance_common import AptMaintenanceCommon
 
 
 def write_trade_price(argv: object) -> object:
@@ -68,11 +69,82 @@ def write_trade_price(argv: object) -> object:
 
 
 def write_maintenance_price(argv):
-    pass
+    apt_maintenance_common = AptMaintenanceCommon()
+    category = apt_maintenance_common.get_common_category()
+    category.update(apt_maintenance_common.get_hsmp_labor_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_ofcrk_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_taxdue_category())
+    category.update(apt_maintenance_common.get_hsmp_clothing_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_edu_traing_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_vhcle_mntnc_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_etc_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_cleaning_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_guard_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_disinfection_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_elevator_mntnc_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_home_network_mntnc_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_repairs_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_facility_mntnc_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_safety_check_up_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_disaster_prevention_cost_category())
+    category.update(apt_maintenance_common.get_hsmp_consign_manage_fee_category())
+
+    db = Database()
+    db.connect()
+    load_code = "1130510100"  # 미아동
+    search_date = "201801"
+    sql = apt_maintenance_common.get_all_data_query(load_code, search_date)
+    maintenance_common = db.select(sql)
+    for fee in maintenance_common:
+        data = {
+            "id": fee[0],
+            category["load_code"]: fee[1],
+            category["kaptCode"]: fee[2],
+            category["kaptName"]: fee[3],
+            category["searchDate"]: fee[4],
+            category["pay"]: fee[5],
+            category["sundryCost"]: fee[6],
+            category["bonus"]: fee[7],
+            category["pension"]: fee[8],
+            category["accidentPremium"]: fee[9],
+            category["employPremium"]: fee[10],
+            category["nationalPension"]: fee[11],
+            category["healthPremium"]: fee[12],
+            category["welfareBenefit"]: fee[13],
+            category["officeSupply"]: fee[14],
+            category["bookSupply"]: fee[15],
+            category["transportCost"]: fee[16],
+            category["telCost"]: fee[17],
+            category["postageCost"]: fee[18],
+            category["taxrestCost"]: fee[19],
+            category["clothesCost"]: fee[20],
+            category["eduCost"]: fee[21],
+            category["fuelCost"]: fee[22],
+            category["refairCost"]: fee[23],
+            category["carInsurance"]: fee[24],
+            category["carEtc"]: fee[25],
+            category["careItemCost"]: fee[26],
+            category["accountingCost"]: fee[27],
+            category["hiddenCost"]: fee[28],
+            category["cleanCost"]: fee[29],
+            category["guardCost"]: fee[30],
+            category["disinfCost"]: fee[31],
+            category["elevCost"]: fee[32],
+            category["hnetwCost"]: fee[33],
+            category["lrefCost1"]: fee[34],
+            category["lrefCost2"]: fee[35],
+            category["lrefCost3"]: fee[36],
+            category["lrefCost4"]: fee[37],
+            category["manageCost"]: fee[38]
+        }
+        pprint(data)
+        sys.exit()
+
+    db.close()
 
 
 # 국토부 아파트 실거래가 글쓰기
 if sys.argv[0] == 'trade':
     write_trade_price(sys.argv)
-elif sys.argv[1] == 'maintenance':
+elif sys.argv[0] == 'maintenance' or True:
     write_maintenance_price(sys.argv)

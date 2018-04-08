@@ -40,10 +40,11 @@ class OpenApi:
     def get_content(self):
         url = self.urls[self.url_name] + self.url_method
         self.param += "&serviceKey={SERVICE_KEY}".format(SERVICE_KEY=self.service_key)  # add service_key
+        full_url = url + "?" + self.param
         # print(self.url_name)
-        # print(url + "?" + self.param)
+        # print(full_url)
         # sys.exit()
-        request = urllib.request.Request(url + "?" + self.param)
+        request = urllib.request.Request(full_url)
         response = urllib.request.urlopen(request)
         res_code = response.getcode()
         if res_code == 200:

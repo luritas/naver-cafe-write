@@ -1,8 +1,9 @@
-import json
 import os
+import sys
+import json
 from pprint import pprint
 
-from open_api import OpenApi
+from .open_api import OpenApi
 
 
 # TODO DB에 데이터 박고 불러와서 html 만들기
@@ -16,6 +17,8 @@ class AptMaintenanceCommon(OpenApi):
 
     def get_common_category(self):
         return {
+            "load_code": "지역",
+            "searchDate": "기준월",
             "kaptCode": "아파트코드",
             "kaptName": "아파트명",
         }
@@ -28,9 +31,9 @@ class AptMaintenanceCommon(OpenApi):
         return {
             "pay": "급여",
             "sundryCost": "제수당",
-            "bonus ": "상여금",
+            "bonus": "상여금",
             "pension": "퇴직금",
-            "accidentPremium ": "산재보험료",
+            "accidentPremium": "산재보험료",
             "employPremium": " 고용보험료",
             "nationalPension": "국민연금",
             "healthPremium": " 건강보험료",
@@ -251,6 +254,213 @@ class AptMaintenanceCommon(OpenApi):
         maintenance_fee.update(content)
 
         return maintenance_fee
+
+    def create_sql(self):
+        sql = """
+        INSERT INTO `naver`.`apt_maintenance_common`
+(
+`load_code`,
+`kaptCode`,
+`kaptName`,
+`searchDate`,
+`pay`,
+
+`sundryCost`,
+`bonus`,
+`pension`,
+`accidentPremium`,
+`employPremium`,
+
+`nationalPension`,
+`healthPremium`,
+`welfareBenefit`,
+`officeSupply`,
+`bookSupply`,
+
+`transportCost`,
+`telCost`,
+`postageCost`,
+`taxrestCost`,
+`clothesCost`,
+
+`eduCost`,
+`fuelCost`,
+`refairCost`,
+`carInsurance`,
+`carEtc`,
+
+`careItemCost`,
+`accountingCost`,
+`hiddenCost`,
+`cleanCost`,
+`guardCost`,
+
+`disinfCost`,
+`elevCost`,
+`hnetwCost`,
+`lrefCost1`,
+`lrefCost2`,
+
+`lrefCost3`,
+`lrefCost4`,
+`manageCost`
+)
+VALUES (
+%s,
+%s,
+%s,
+%s,
+%s,
+%s,
+
+%s,
+%s,
+%s,
+%s,
+%s,
+
+%s,
+%s,
+%s,
+%s,
+%s,
+
+%s,
+%s,
+%s,
+%s,
+%s,
+
+%s,
+%s,
+%s,
+%s,
+%s,
+
+%s,
+%s,
+%s,
+%s,
+%s,
+
+%s,
+%s,
+%s,
+%s,
+%s,
+
+%s,
+%s);
+"""
+        return sql
+
+    def create_param(self, item, load_code, search_date):
+        param = []
+        try:
+            param = [tuple([
+                load_code,
+                item['kaptCode'],
+                item['kaptName'],
+                search_date,
+                item['pay'],
+                item['sundryCost'],
+
+                item['bonus'],
+                item['pension'],
+                item['accidentPremium'],
+                item['employPremium'],
+                item['nationalPension'],
+
+                item['healthPremium'],
+                item['welfareBenefit'],
+                item['officeSupply'],
+                item['bookSupply'],
+                item['transportCost'],
+
+                item['telCost'],
+                item['postageCost'],
+                item['taxrestCost'],
+                item['clothesCost'],
+                item['eduCost'],
+
+                item['fuelCost'],
+                item['refairCost'],
+                item['carInsurance'],
+                item['carEtc'],
+                item['careItemCost'],
+
+                item['accountingCost'],
+                item['hiddenCost'],
+                item['cleanCost'],
+                item['guardCost'],
+                item['disinfCost'],
+
+                item['elevCost'],
+                item['hnetwCost'],
+                item['lrefCost1'],
+                item['lrefCost2'],
+                item['lrefCost3'],
+
+                item['lrefCost4'],
+                item['manageCost'],
+            ])]
+        except Exception as e:
+            print(e)
+            print(item)
+
+        return param
+
+    def get_all_data_query(self, load_code, search_date):
+        sql = """
+SELECT
+    `apt_maintenance_common`.`id`,
+    `apt_maintenance_common`.`load_code`,
+    `apt_maintenance_common`.`kaptCode`,
+    `apt_maintenance_common`.`kaptName`,
+    `apt_maintenance_common`.`searchDate`,
+    `apt_maintenance_common`.`pay`,
+    `apt_maintenance_common`.`sundryCost`,
+    `apt_maintenance_common`.`bonus`,
+    `apt_maintenance_common`.`pension`,
+    `apt_maintenance_common`.`accidentPremium`,
+    `apt_maintenance_common`.`employPremium`,
+    `apt_maintenance_common`.`nationalPension`,
+    `apt_maintenance_common`.`healthPremium`,
+    `apt_maintenance_common`.`welfareBenefit`,
+    `apt_maintenance_common`.`officeSupply`,
+    `apt_maintenance_common`.`bookSupply`,
+    `apt_maintenance_common`.`transportCost`,
+    `apt_maintenance_common`.`telCost`,
+    `apt_maintenance_common`.`postageCost`,
+    `apt_maintenance_common`.`taxrestCost`,
+    `apt_maintenance_common`.`clothesCost`,
+    `apt_maintenance_common`.`eduCost`,
+    `apt_maintenance_common`.`fuelCost`,
+    `apt_maintenance_common`.`refairCost`,
+    `apt_maintenance_common`.`carInsurance`,
+    `apt_maintenance_common`.`carEtc`,
+    `apt_maintenance_common`.`careItemCost`,
+    `apt_maintenance_common`.`accountingCost`,
+    `apt_maintenance_common`.`hiddenCost`,
+    `apt_maintenance_common`.`cleanCost`,
+    `apt_maintenance_common`.`guardCost`,
+    `apt_maintenance_common`.`disinfCost`,
+    `apt_maintenance_common`.`elevCost`,
+    `apt_maintenance_common`.`hnetwCost`,
+    `apt_maintenance_common`.`lrefCost1`,
+    `apt_maintenance_common`.`lrefCost2`,
+    `apt_maintenance_common`.`lrefCost3`,
+    `apt_maintenance_common`.`lrefCost4`,
+    `apt_maintenance_common`.`manageCost`
+FROM
+    `naver`.
+    `apt_maintenance_common`
+WHERE
+load_code = '%s'
+AND
+searchDate = '%s';
+""" % (load_code, search_date)
+        return sql
 
 
 if __name__ == "__main__":

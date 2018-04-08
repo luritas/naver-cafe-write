@@ -43,7 +43,6 @@ class Database:
             print("쿼리를 실행했습니다")
         except Exception as e:
             print(e)
-            self.connection.close()
 
     def close(self):
         self.connection.close()
