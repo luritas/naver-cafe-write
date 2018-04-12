@@ -137,8 +137,6 @@ def write_maintenance_price(argv):
             category["lrefCost4"]: fee[37],
             category["manageCost"]: fee[38]
         }
-        pprint(data)
-        sys.exit()
 
     db.close()
 

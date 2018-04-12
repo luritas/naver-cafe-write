@@ -5,6 +5,7 @@ from packages.apt_maintenance_common import AptMaintenanceCommon
 from pprint import pprint
 
 load_code = "1130510100"  # 미아동
+search_date = "201802"
 db = Database()
 db.connect()
 
@@ -19,8 +20,6 @@ WHERE
 kapt_codes = db.select(sql)
 
 for kapt_code in kapt_codes:
-    search_date = "201801"
-
     apt_maintenance_common = AptMaintenanceCommon()
     items = apt_maintenance_common.merge_all_data(kapt_code[0], search_date)
 

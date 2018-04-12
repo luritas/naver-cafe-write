@@ -29,7 +29,7 @@ MENU_ID: 메뉴 아이디
 # packages
 ```
 - apt_list.py: 공동주택단지 리스트
-- apt_maintenance_fee.py: 공동주택단지 관리비
+- apt_maintenance_common.py: 공동주택단지 관리비
 - apt_maintenance_status.py: 공동주택단지 관리현황
 - apt_real_price_trade.py: 국토부 아파트 실거래가
 - apt_real_rent.py: 국토부 아파트 전월세자료

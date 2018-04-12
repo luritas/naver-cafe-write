@@ -14,7 +14,7 @@ class OpenApi:
         #     "apt_real_price_trade": os.environ.get("OPEN_API_SERVICE_KEY"),
         #     "apt_real_rent": os.environ.get("OPEN_API_SERVICE_KEY"),
         #     "apt_list": os.environ.get("OPEN_API_SERVICE_KEY"),
-        #     "apt_maintenance_fee": os.environ.get("OPEN_API_SERVICE_KEY")
+        #     "apt_maintenance_common": os.environ.get("OPEN_API_SERVICE_KEY")
         # }
         self.service_key = os.environ.get("APT_TRADE_SERVICE_KEY")
         self.hostname1 = "http://openapi.molit.go.kr"
@@ -25,7 +25,8 @@ class OpenApi:
             "apt_real_rent": self.hostname1 + ":8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/"
                                               "getRTMSDataSvcAptRent",
             "apt_list": self.hostname2 + "/1611000/AptListService",
-            "apt_maintenance_fee": self.hostname2 + "/1611000/AptCmnuseManageCostService"
+            "apt_maintenance_common": self.hostname2 + "/1611000/AptCmnuseManageCostService",
+            "apt_maintenance_personal": self.hostname2 + "/1611000/AptIndvdlzManageCostService",
         }
         self.url_name = None
         self.url_method = None
