@@ -81,7 +81,8 @@ def write_maintenance_price(argv):
     search_date = "201801"
     sql = apt_maintenance_common.get_all_data_query(load_code, search_date)
     maintenance_common = db.select(sql)
-    sql = apt_maintenance_personal.get
+    sql = apt_maintenance_personal.get_all_data_query(load_code, search_date)
+    # sql = apt_maintenance_personal.get_
     db.close()
     for fee in maintenance_common:
         data = {

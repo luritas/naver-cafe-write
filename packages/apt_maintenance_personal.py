@@ -232,3 +232,33 @@ VALUES
         category.update(self.get_hsmp_election_orpns_category())
 
         return category
+
+    def get_all_data_query(self, load_code, search_date):
+        sql = """
+SELECT 
+    `apt_maintenance_personal`.`id`,
+    `apt_maintenance_personal`.`load_code`,
+    `apt_maintenance_personal`.`kaptCode`,
+    `apt_maintenance_personal`.`kaptName`,
+    `apt_maintenance_personal`.`searchDate`,
+    `apt_maintenance_personal`.`heatC`,
+    `apt_maintenance_personal`.`heatP`,
+    `apt_maintenance_personal`.`waterHotC`,
+    `apt_maintenance_personal`.`waterHotP`,
+    `apt_maintenance_personal`.`gasC`,
+    `apt_maintenance_personal`.`gasP`,
+    `apt_maintenance_personal`.`electC`,
+    `apt_maintenance_personal`.`electP`,
+    `apt_maintenance_personal`.`waterCoolC`,
+    `apt_maintenance_personal`.`waterCoolP`,
+    `apt_maintenance_personal`.`purifi`,
+    `apt_maintenance_personal`.`scrap`,
+    `apt_maintenance_personal`.`preMeet`,
+    `apt_maintenance_personal`.`buildInsu`,
+    `apt_maintenance_personal`.`electionMng`
+FROM
+    `naver`.`apt_maintenance_personal`
+WHERE
+    load_code = %s AND searchDate = %s;
+
+        """
