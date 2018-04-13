@@ -7,11 +7,11 @@ import requests
 from datetime import datetime
 from pprint import pprint
 
+from packages.apt_maintenance_personal import AptMaintenancePersonal
+from packages.apt_maintenance_common import AptMaintenanceCommon
 from packages.apt_real_price_trade import AptRealPriceTrade
-from packages.apt_real_rent import AptRealRent
 from packages.db import Database
 from packages.naver_cafe_write import NaverCafeWrite
-from packages.apt_maintenance_common import AptMaintenanceCommon
 
 
 def write_trade_price(argv: object) -> object:
@@ -70,24 +70,10 @@ def write_trade_price(argv: object) -> object:
 
 def write_maintenance_price(argv):
     apt_maintenance_common = AptMaintenanceCommon()
-    category = apt_maintenance_common.get_common_category()
-    category.update(apt_maintenance_common.get_hsmp_labor_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_ofcrk_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_taxdue_category())
-    category.update(apt_maintenance_common.get_hsmp_clothing_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_edu_traing_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_vhcle_mntnc_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_etc_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_cleaning_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_guard_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_disinfection_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_elevator_mntnc_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_home_network_mntnc_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_repairs_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_facility_mntnc_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_safety_check_up_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_disaster_prevention_cost_category())
-    category.update(apt_maintenance_common.get_hsmp_consign_manage_fee_category())
+    common_category = apt_maintenance_common.get_category()
+    apt_maintenance_personal = AptMaintenancePersonal()
+    personal_cateogry = apt_maintenance_personal.get_category()
+    # TODO personal 파싱하기
 
     db = Database()
     db.connect()
@@ -95,50 +81,50 @@ def write_maintenance_price(argv):
     search_date = "201801"
     sql = apt_maintenance_common.get_all_data_query(load_code, search_date)
     maintenance_common = db.select(sql)
+    sql = apt_maintenance_personal.get
+    db.close()
     for fee in maintenance_common:
         data = {
             "id": fee[0],
-            category["load_code"]: fee[1],
-            category["kaptCode"]: fee[2],
-            category["kaptName"]: fee[3],
-            category["searchDate"]: fee[4],
-            category["pay"]: fee[5],
-            category["sundryCost"]: fee[6],
-            category["bonus"]: fee[7],
-            category["pension"]: fee[8],
-            category["accidentPremium"]: fee[9],
-            category["employPremium"]: fee[10],
-            category["nationalPension"]: fee[11],
-            category["healthPremium"]: fee[12],
-            category["welfareBenefit"]: fee[13],
-            category["officeSupply"]: fee[14],
-            category["bookSupply"]: fee[15],
-            category["transportCost"]: fee[16],
-            category["telCost"]: fee[17],
-            category["postageCost"]: fee[18],
-            category["taxrestCost"]: fee[19],
-            category["clothesCost"]: fee[20],
-            category["eduCost"]: fee[21],
-            category["fuelCost"]: fee[22],
-            category["refairCost"]: fee[23],
-            category["carInsurance"]: fee[24],
-            category["carEtc"]: fee[25],
-            category["careItemCost"]: fee[26],
-            category["accountingCost"]: fee[27],
-            category["hiddenCost"]: fee[28],
-            category["cleanCost"]: fee[29],
-            category["guardCost"]: fee[30],
-            category["disinfCost"]: fee[31],
-            category["elevCost"]: fee[32],
-            category["hnetwCost"]: fee[33],
-            category["lrefCost1"]: fee[34],
-            category["lrefCost2"]: fee[35],
-            category["lrefCost3"]: fee[36],
-            category["lrefCost4"]: fee[37],
-            category["manageCost"]: fee[38]
+            common_category["load_code"]: fee[1],
+            common_category["kaptCode"]: fee[2],
+            common_category["kaptName"]: fee[3],
+            common_category["searchDate"]: fee[4],
+            common_category["pay"]: fee[5],
+            common_category["sundryCost"]: fee[6],
+            common_category["bonus"]: fee[7],
+            common_category["pension"]: fee[8],
+            common_category["accidentPremium"]: fee[9],
+            common_category["employPremium"]: fee[10],
+            common_category["nationalPension"]: fee[11],
+            common_category["healthPremium"]: fee[12],
+            common_category["welfareBenefit"]: fee[13],
+            common_category["officeSupply"]: fee[14],
+            common_category["bookSupply"]: fee[15],
+            common_category["transportCost"]: fee[16],
+            common_category["telCost"]: fee[17],
+            common_category["postageCost"]: fee[18],
+            common_category["taxrestCost"]: fee[19],
+            common_category["clothesCost"]: fee[20],
+            common_category["eduCost"]: fee[21],
+            common_category["fuelCost"]: fee[22],
+            common_category["refairCost"]: fee[23],
+            common_category["carInsurance"]: fee[24],
+            common_category["carEtc"]: fee[25],
+            common_category["careItemCost"]: fee[26],
+            common_category["accountingCost"]: fee[27],
+            common_category["hiddenCost"]: fee[28],
+            common_category["cleanCost"]: fee[29],
+            common_category["guardCost"]: fee[30],
+            common_category["disinfCost"]: fee[31],
+            common_category["elevCost"]: fee[32],
+            common_category["hnetwCost"]: fee[33],
+            common_category["lrefCost1"]: fee[34],
+            common_category["lrefCost2"]: fee[35],
+            common_category["lrefCost3"]: fee[36],
+            common_category["lrefCost4"]: fee[37],
+            common_category["manageCost"]: fee[38]
         }
-
-    db.close()
 
 
 # 국토부 아파트 실거래가 글쓰기

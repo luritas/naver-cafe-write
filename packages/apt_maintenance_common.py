@@ -469,6 +469,27 @@ searchDate = '%s';
 """ % (load_code, search_date)
         return sql
 
+    def get_category(self):
+        category = self.get_common_category()
+        category.update(self.get_hsmp_labor_cost_category())
+        category.update(self.get_hsmp_ofcrk_cost_category())
+        category.update(self.get_hsmp_taxdue_category())
+        category.update(self.get_hsmp_clothing_cost_category())
+        category.update(self.get_hsmp_edu_traing_cost_category())
+        category.update(self.get_hsmp_vhcle_mntnc_cost_category())
+        category.update(self.get_hsmp_etc_cost_category())
+        category.update(self.get_hsmp_cleaning_cost_category())
+        category.update(self.get_hsmp_guard_cost_category())
+        category.update(self.get_hsmp_disinfection_cost_category())
+        category.update(self.get_hsmp_elevator_mntnc_cost_category())
+        category.update(self.get_hsmp_home_network_mntnc_cost_category())
+        category.update(self.get_hsmp_repairs_cost_category())
+        category.update(self.get_hsmp_facility_mntnc_cost_category())
+        category.update(self.get_hsmp_safety_check_up_cost_category())
+        category.update(self.get_hsmp_disaster_prevention_cost_category())
+        category.update(self.get_hsmp_consign_manage_fee_category())
+        return category
+
 
 if __name__ == "__main__":
     kapt_code = "A14272314"  # 두산트레지움

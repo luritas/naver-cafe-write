@@ -171,52 +171,17 @@ class AptMaintenancePersonal(OpenApi):
         sql = """
 INSERT INTO `naver`.`apt_maintenance_personal`
 (
-`load_code`,
-`kaptCode`,
-`kaptName`,
-`searchDate`,
-`heatC`,
-
-`heatP`,
-`waterHotC`,
-`waterHotP`,
-`gasC`,
-`gasP`,
-
-`electC`,
-`electP`,
-`waterCoolC`,
-`waterCoolP`,
-`purifi`,
-
-`scrap`,
-`preMeet`,
-`buildInsu`,
-`electionMng`)
+`load_code`, `kaptCode`, `kaptName`, `searchDate`, `heatC`,
+`heatP`, `waterHotC`, `waterHotP`, `gasC`, `gasP`,
+`electC`, `electP`, `waterCoolC`, `waterCoolP`, `purifi`,
+`scrap`, `preMeet`, `buildInsu`, `electionMng`
+)
 VALUES
 (
-%s,
-%s,
-%s,
-%s,
-%s,
-
-%s,
-%s,
-%s,
-%s,
-%s,
-
-%s,
-%s,
-%s,
-%s,
-%s,
-
-%s,
-%s,
-%s,
-%s);
+%s, %s, %s, %s, %s,
+%s, %s, %s, %s, %s,
+%s, %s, %s, %s, %s,
+%s, %s, %s, %s);
 """
         return sql
 
@@ -252,3 +217,18 @@ VALUES
             print(item)
 
         return param
+
+    def get_category(self):
+        category = self.get_common_category()
+        category.update(self.get_hsmp_heat_cost_category())
+        category.update(self.get_hsmp_hot_water_cost_category())
+        category.update(self.get_hsmp_gas_rental_fee_category())
+        category.update(self.get_hsmp_electricity_cost_category())
+        category.update(self.get_hsmp_water_cost_category())
+        category.update(self.get_hsmp_water_purifier_tank_fee_category())
+        category.update(self.get_hsmp_domestic_waste_fee_category())
+        category.update(self.get_hsmp_moving_in_representation_mtg_category())
+        category.update(self.get_hsmp_building_insurance_fee_category())
+        category.update(self.get_hsmp_election_orpns_category())
+
+        return category
