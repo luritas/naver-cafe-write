@@ -28,6 +28,16 @@ class AptList(OpenApi):
     def set_param(self, parameters):
         self.param = "loadCode={0}&numOfRows=1000".format(parameters['load_code'])
 
+    def get_all_list_query(self, load_code):
+        return """
+SELECT 
+    *
+FROM
+    naver.apt_list
+WHERE
+    load_code = %s;
+        """ % load_code
+
     def create_sql(self):
         sql = """
 INSERT INTO `naver`.`apt_list`

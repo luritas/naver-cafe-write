@@ -260,5 +260,5 @@ FROM
     `naver`.`apt_maintenance_personal`
 WHERE
     load_code = %s AND searchDate = %s;
-
-        """
+        """ % (load_code, search_date)
+        return sql
