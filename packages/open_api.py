@@ -42,8 +42,8 @@ class OpenApi:
         url = self.urls[self.url_name] + self.url_method
         self.param += "&serviceKey={SERVICE_KEY}".format(SERVICE_KEY=self.service_key)  # add service_key
         full_url = url + "?" + self.param
-        # print(self.url_name)
-        # print(full_url)
+        print(self.url_name)
+        print(full_url)
         # sys.exit()
         request = urllib.request.Request(full_url)
         response = urllib.request.urlopen(request)

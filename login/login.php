@@ -50,7 +50,7 @@ $data = [
 ];
 
 try {
-    $id = $db->insert('tokens', $data);
+    //$id = $db->insert('tokens', $data);
 } catch (Exception $e) {
     // TODO 에러를 안뱉어서 별로임...
     die("DB 쿼리실패 - {$e->getMessage()}");

@@ -22,7 +22,7 @@ class NaverCafeWrite:
         return rows[0][1]
 
     def write_article_to_naver_cafe(self, subject, content, files):
-        header = "Bearer " + self.token  # Bearer 다음에 공백 추가
+        header = "Bearer %s" % self.token  # Bearer 다음에 공백 추가
         club_id = os.environ.get("CLUB_ID")  # 카페의 고유 ID값
         menu_id = os.environ.get("MENU_ID")  # (상품게시판은 입력 불가)
         url = "https://openapi.naver.com/v1/cafe/" + club_id + "/menu/" + menu_id + "/articles"
@@ -35,5 +35,5 @@ class NaverCafeWrite:
         if res_code == 200:
             return response
         else:
-            pprint(response)
+            pprint(response.text)
             raise Exception('네이버 카페 통신실패')

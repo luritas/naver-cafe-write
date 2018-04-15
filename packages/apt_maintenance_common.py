@@ -34,9 +34,9 @@ class AptMaintenanceCommon(OpenApi):
             "bonus": "상여금",
             "pension": "퇴직금",
             "accidentPremium": "산재보험료",
-            "employPremium": " 고용보험료",
+            "employPremium": "고용보험료",
             "nationalPension": "국민연금",
-            "healthPremium": " 건강보험료",
+            "healthPremium": "건강보험료",
             "welfareBenefit": "식대 등 복리후생비",
         }
 
@@ -207,7 +207,6 @@ class AptMaintenanceCommon(OpenApi):
         pprint("=" * 100)
         pprint(data)
         if data['response']['body'] is None:
-            sys.exit()
             return []
         content = self.get_only_item_from_parsed_content(data)
         maintenance_fee.update(content)
@@ -285,29 +284,30 @@ class AptMaintenanceCommon(OpenApi):
 `bookSupply`,
 
 `transportCost`,
+`elecCost`,
 `telCost`,
 `postageCost`,
 `taxrestCost`,
-`clothesCost`,
 
+`clothesCost`,
 `eduCost`,
 `fuelCost`,
 `refairCost`,
 `carInsurance`,
-`carEtc`,
 
+`carEtc`,
 `careItemCost`,
 `accountingCost`,
 `hiddenCost`,
 `cleanCost`,
-`guardCost`,
 
+`guardCost`,
 `disinfCost`,
 `elevCost`,
 `hnetwCost`,
 `lrefCost1`,
-`lrefCost2`,
 
+`lrefCost2`,
 `lrefCost3`,
 `lrefCost4`,
 `manageCost`
@@ -318,7 +318,6 @@ VALUES (
 %s,
 %s,
 %s,
-%s,
 
 %s,
 %s,
@@ -357,7 +356,10 @@ VALUES (
 %s,
 
 %s,
-%s);
+%s,
+%s,
+%s
+);
 """
         return sql
 
@@ -370,44 +372,45 @@ VALUES (
                 item['kaptName'],
                 search_date,
                 item['pay'],
-                item['sundryCost'],
 
+                item['sundryCost'],
                 item['bonus'],
                 item['pension'],
                 item['accidentPremium'],
                 item['employPremium'],
-                item['nationalPension'],
 
+                item['nationalPension'],
                 item['healthPremium'],
                 item['welfareBenefit'],
                 item['officeSupply'],
                 item['bookSupply'],
-                item['transportCost'],
 
+                item['transportCost'],
+                item['elecCost'],
                 item['telCost'],
                 item['postageCost'],
                 item['taxrestCost'],
+
                 item['clothesCost'],
                 item['eduCost'],
-
                 item['fuelCost'],
                 item['refairCost'],
                 item['carInsurance'],
+
                 item['carEtc'],
                 item['careItemCost'],
-
                 item['accountingCost'],
                 item['hiddenCost'],
                 item['cleanCost'],
+
                 item['guardCost'],
                 item['disinfCost'],
-
                 item['elevCost'],
                 item['hnetwCost'],
                 item['lrefCost1'],
+
                 item['lrefCost2'],
                 item['lrefCost3'],
-
                 item['lrefCost4'],
                 item['manageCost'],
             ])]
@@ -437,6 +440,7 @@ SELECT
     `apt_maintenance_common`.`officeSupply`,
     `apt_maintenance_common`.`bookSupply`,
     `apt_maintenance_common`.`transportCost`,
+    `apt_maintenance_common`.`elecCost`,
     `apt_maintenance_common`.`telCost`,
     `apt_maintenance_common`.`postageCost`,
     `apt_maintenance_common`.`taxrestCost`,
