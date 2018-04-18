@@ -288,9 +288,9 @@ VALUES
 
         return html
 
-    if __name__ == "__main__":
-        apt_list = AptList()
-        load_code = "1130510100"  # 미아동
-        content = apt_list.get_legal_dong_apt_list(load_code)
-        items = apt_list.get_items_from_parsed_content(content)
-        pprint(items)
+if __name__ == "__main__":
+    apt_list = AptList()
+    load_code = "1130510100"  # 미아동
+    content = apt_list.get_legal_dong_apt_list(load_code)
+    items = apt_list.get_items_from_parsed_content(content)
+    pprint(items)

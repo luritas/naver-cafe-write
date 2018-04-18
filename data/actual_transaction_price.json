@@ -1,0 +1,231 @@
+{
+  "국토부실거래가": {
+    "korean": "국토교통부 실거래가 자료 제공",
+    "english": "RTMSData",
+    "description": "부동산 거래신고에 관한 법률에 따라 신고된 실거래 자료를 제공하는 신고 조회 서비스",
+    "format": "xml",
+    "service_key": "발급 필요",
+    "services": {
+      "아파트매매": {
+        "version": "1.0",
+        "korean": "아파트매매 실거래가 자료",
+        "english": "Apartment real estate transaction data",
+        "operation": "아파트매매자료",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 아파트 매매 신고자료를 제공하는 아파트 매매 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "연립다세대매매": {
+        "version": "1.0",
+        "korean": "연립다세대 실거래가 자료",
+        "english": "Townhouse house real estate trade",
+        "operation": "연립다세대 매매 실거래 자료",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 연립다세대 매매 신고자료를 제공하는 연립다세대 매매 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcRHTrade",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "단독다가구매매": {
+        "version": "1.0",
+        "korean": "단독/다가구 매매 실거래가 자료",
+        "english": "Detached house real estate trade",
+        "operation": "단독/다가구매매 실거래가 자료",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역 단독/다가구 매매 신고자료를 제공하는 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcSHTrade",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "오피스텔매매": {
+        "version": "1.0",
+        "korean": "오피스텔 매매 실거래가 자료",
+        "english": "getRTMSDataSvcOffiTrade",
+        "operation": "오피스텔 매매 실거래가 자료",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 오피스텔 매매 신고자료를 제공하는 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcOffiTrade",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "토지매매": {
+        "version": "1.0",
+        "korean": "토지 매매 신고 조회 서비스",
+        "english": "getRTMSDataSvcLandTrade",
+        "operation": "토지 매매 신고 정보 조회",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 토지 매매 신고자료를 제공하는 토지 매매 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcLandTrade",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "아파트전월세": {
+        "version": "1.0",
+        "korean": "아파트 전월세 자료",
+        "english": "Apartment rent data",
+        "operation": "아파트 전월세 자료",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 아파트 전월세 신고자료를 제공하는 아파트 전월세 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptRent",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "연립다세대전월세": {
+        "version": "1.0",
+        "korean": "연립다세대 전월세 자료",
+        "english": "Townhouse house rent",
+        "operation": "연립다세대 전월세 자료",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 연립다세대 전월세 신고자료를 제공하는 연립다세대 전월세 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcRHRent",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "단독다가구전월세": {
+        "version": "1.0",
+        "korean": "단독/다가구 전월세 자료",
+        "english": "Detached house rent",
+        "operation": "단독/다가구 전월세 자료",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 단독/다가구 전월세 신고자료를 제공하는 단독/다가구 전월세 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcHRent",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "오피스텔 전월세 신고 조회 서비스": {
+        "version": "1.0",
+        "korean": "오피스텔 전월세 신고 조회 서비스",
+        "english": "getRTMSDataSvcOffiRent",
+        "operation": "오피스텔 전월세 신고 조회 서비스",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 오피스텔 전월세 신고자료를 제공하는 오피스텔 전월세 신고 정보 조회",
+        "url": "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcOffiRent",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      },
+      "아파트매매상세": {
+        "version": "1.0",
+        "korean": "아파트매매 실거래 상세자료 조회",
+        "english": "Apartment real estate transaction data(development)",
+        "operation": "오피스텔 전월세 신고 조회 서비스",
+        "description": "지역코드와 기간을 이용하여 해당기간, 해당지역의 아파트 실거래가 신고자료를 제공하는 아파트 실거래가 신고 상세정보 조회",
+        "url": "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev",
+        "parameters": {
+          "LAWD_CD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          },
+          "DEAL_YMD": {
+            "required": true,
+            "type": "integer",
+            "description": "지역코드",
+            "example": "11110"
+          }
+        }
+      }
+    }
+  }
+}
