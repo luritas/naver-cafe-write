@@ -1,0 +1,142 @@
+{
+  "국토부실거래가": {
+    "korean": "국토교통부 실거래가 자료 제공",
+    "english": "RTMSData",
+    "description": "부동산 거래신고에 관한 법률에 따라 신고된 실거래 자료를 제공하는 신고 조회 서비스",
+    "format": "xml",
+    "host": "http://abcd.com/abcd",
+    "service_key": "abcd1234",
+    "services": {
+      "아파트매매": {
+        "korean": "아파트매매 실거래가 자료",
+        "english": "Apartment real estate transaction data",
+        "operation": "아파트매매자료",
+        "path": "/efg",
+        "format": "xml",
+        "parameters": {
+          "load_code": {
+            "required": true,
+            "type": "integer"
+          }
+        }
+      },
+      "연립다세대매매": {
+        "korean": "연립다세대 실거래가 자료",
+        "english": "Townhouse house real estate trade",
+        "operation": "연립다세대 매매 실거래 자료",
+        "path": "/efg",
+        "format": "xml",
+        "parameters": {
+          "load_code": {
+            "required": true,
+            "type": "integer"
+          }
+        }
+      },
+      "단독다가구매매": {
+        "korean": "단독/다가구 매매 실거래가 자료",
+        "english": "Detached house real estate trade",
+        "operation": "단독/다가구매매 실거래가 자료",
+        "path": "/efg",
+        "format": "xml",
+        "parameters": {
+          "load_code": {
+            "required": true,
+            "type": "integer"
+          }
+        }
+      },
+      "오피스텔매매": {
+        "korean": "오피스텔 매매 실거래가 자료",
+        "english": "getRTMSDataSvcOffiTrade",
+        "operation": "오피스텔 매매 실거래가 자료",
+        "path": "/efg",
+        "format": "xml",
+        "parameters": {
+          "load_code": {
+            "required": true,
+            "type": "integer"
+          }
+        }
+      },
+      "토지매매": {
+        "korean": "토지 매매 신고 조회 서비스",
+        "english": "getRTMSDataSvcLandTrade",
+        "operation": "토지 매매 신고 정보 조회",
+        "path": "/efg",
+        "format": "xml",
+        "parameters": {
+          "load_code": {
+            "required": true,
+            "type": "integer"
+          }
+        }
+      },
+      "아파트전월세": {
+        "korean": "아파트 전월세 자료",
+        "english": "Apartment rent data",
+        "operation": "아파트 전월세 자료",
+        "path": "/efg",
+        "format": "xml",
+        "parameters": {
+          "load_code": {
+            "required": true,
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "연립다세대전월세": {
+      "korean": "연립다세대 전월세 자료",
+      "english": "Townhouse house rent",
+      "operation": "연립다세대 전월세 자료",
+      "path": "/efg",
+      "format": "xml",
+      "parameters": {
+        "load_code": {
+          "required": true,
+          "type": "integer"
+        }
+      }
+    },
+    "단독다가구전월세": {
+      "korean": "단독/다가구 전월세 자료",
+      "english": "Detached house rent",
+      "operation": "단독/다가구 전월세 자료",
+      "path": "/efg",
+      "format": "xml",
+      "parameters": {
+        "load_code": {
+          "required": true,
+          "type": "integer"
+        }
+      }
+    },
+    "오피스텔 전월세 신고 조회 서비스": {
+      "korean": "오피스텔 전월세 신고 조회 서비스",
+      "english": "getRTMSDataSvcOffiRent",
+      "operation": "오피스텔 전월세 신고 조회 서비스",
+      "path": "/efg",
+      "format": "xml",
+      "parameters": {
+        "load_code": {
+          "required": true,
+          "type": "integer"
+        }
+      }
+    },
+    "아파트매매상세": {
+      "korean": "아파트매매 실거래 상세자료 조회",
+      "english": "Apartment real estate transaction data(development)",
+      "operation": "오피스텔 전월세 신고 조회 서비스",
+      "path": "/efg",
+      "format": "xml",
+      "parameters": {
+        "load_code": {
+          "required": true,
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
